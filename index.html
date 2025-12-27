@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>روايات Coffee Shop</title>
+    <title>روايات Coffee Shop - Tripoli, Lebanon</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -18,7 +18,8 @@
             --shadow: 0 4px 12px rgba(0,0,0,0.08);
             --shadow-hover: 0 8px 20px rgba(0,0,0,0.15);
             --radius: 12px;
-            --transition: all 0.3s ease;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --animation-duration: 0.6s;
         }
         
         * {
@@ -56,6 +57,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
         }
         
         .logo {
@@ -75,6 +82,17 @@
             justify-content: center;
             color: white;
             font-size: 18px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .logo-text {
+            display: none; /* Hidden by default */
         }
         
         .logo-text h1 {
@@ -102,6 +120,11 @@
             gap: 4px;
             cursor: pointer;
             color: white;
+            transition: var(--transition);
+        }
+        
+        .menu-toggle:hover {
+            transform: rotate(90deg);
         }
         
         .menu-toggle span {
@@ -110,6 +133,18 @@
             background: white;
             transition: var(--transition);
             border-radius: 2px;
+        }
+        
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
         }
         
         /* Mobile Menu */
@@ -125,10 +160,12 @@
             transform: translateY(-150%);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             overflow: hidden;
+            opacity: 0;
         }
         
         .mobile-menu.active {
             transform: translateY(0);
+            opacity: 1;
         }
         
         .menu-items {
@@ -137,7 +174,25 @@
         
         .menu-item {
             border-bottom: 1px solid #eee;
+            transform: translateX(-20px);
+            opacity: 0;
+            animation: slideInRight 0.5s forwards;
         }
+        
+        @keyframes slideInRight {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .menu-item:nth-child(1) { animation-delay: 0.1s; }
+        .menu-item:nth-child(2) { animation-delay: 0.2s; }
+        .menu-item:nth-child(3) { animation-delay: 0.3s; }
+        .menu-item:nth-child(4) { animation-delay: 0.4s; }
+        .menu-item:nth-child(5) { animation-delay: 0.5s; }
+        .menu-item:nth-child(6) { animation-delay: 0.6s; }
+        .menu-item:nth-child(7) { animation-delay: 0.7s; }
         
         .menu-link {
             display: flex;
@@ -154,15 +209,18 @@
             width: 25px;
             color: var(--primary);
             font-size: 18px;
+            transition: var(--transition);
         }
         
         .menu-link:hover, .menu-link.active {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
+            transform: translateX(10px);
         }
         
         .menu-link:hover i, .menu-link.active i {
             color: white;
+            transform: scale(1.2);
         }
         
         /* Cart Badge */
@@ -174,6 +232,12 @@
             border-radius: 20px;
             margin-left: auto;
             font-weight: 600;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
         
         /* Main Content */
@@ -183,15 +247,51 @@
             width: 100%;
         }
         
-        /* Hero Section */
+        /* Hero Section - Improved with Image Gallery */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
-                        url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&auto=format&fit=crop') no-repeat center/cover;
+                        url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&auto=format&fit=crop') no-repeat center/cover;
             padding: 80px 20px;
             text-align: center;
             border-radius: var(--radius);
             margin: 15px;
             color: white;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInScale 0.8s ease-out;
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(139,69,19,0.3), rgba(210,105,30,0.3));
+            z-index: 1;
+            animation: gradientShift 8s infinite alternate;
+        }
+        
+        @keyframes gradientShift {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.7; }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
         }
         
         .hero h2 {
@@ -199,6 +299,35 @@
             font-size: 2.2rem;
             margin-bottom: 15px;
             line-height: 1.2;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            animation: slideInUp 0.8s ease-out 0.2s both;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-location {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            opacity: 0.95;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            animation: slideInUp 0.8s ease-out 0.4s both;
+        }
+        
+        .hero-location i {
+            color: var(--accent);
+            animation: pulse 2s infinite 1s;
         }
         
         .hero p {
@@ -206,9 +335,75 @@
             margin: 0 auto 30px;
             opacity: 0.9;
             max-width: 300px;
+            animation: slideInUp 0.8s ease-out 0.6s both;
         }
         
-        /* Buttons */
+        .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            margin-top: 25px;
+            animation: slideInUp 0.8s ease-out 0.8s both;
+        }
+        
+        /* Image Gallery */
+        .image-gallery {
+            margin: 25px 15px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            animation: fadeIn 1s ease-out 1s both;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 120px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 10px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Buttons - Improved */
         .btn {
             padding: 14px 28px;
             border: none;
@@ -222,6 +417,37 @@
             justify-content: center;
             gap: 10px;
             text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(40, 40);
+                opacity: 0;
+            }
         }
         
         .btn-primary {
@@ -246,10 +472,180 @@
             transform: translateY(-3px);
         }
         
-        /* Section Title */
+        .btn-map {
+            background: linear-gradient(135deg, #34A853 0%, #2E7D32 100%);
+            color: white;
+            margin-top: 10px;
+        }
+        
+        .btn-map:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 168, 83, 0.3);
+        }
+        
+        .btn-small {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+        
+        /* Currency Selector - Improved */
+        .currency-selector {
+            position: fixed;
+            top: 70px;
+            right: 15px;
+            z-index: 998;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 50px;
+            box-shadow: var(--shadow);
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            animation: slideInRight 0.5s ease-out 0.3s both;
+        }
+        
+        .currency-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 20px;
+            background: #f5f5f5;
+            color: var(--gray);
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .currency-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        .currency-btn:hover::before {
+            left: 100%;
+        }
+        
+        .currency-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        /* Map Section */
+        .map-section {
+            margin: 25px 15px;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .map-header {
+            padding: 15px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .map-header h3 {
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .map-container {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .map-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark);
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-placeholder::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .map-placeholder:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .map-placeholder i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: var(--primary);
+            animation: bounce 2s infinite;
+        }
+        
+        .map-address {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            text-align: left;
+            animation: fadeIn 0.8s ease-out 0.2s both;
+        }
+        
+        .map-address h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Section Title - Improved */
         .section-title {
             margin: 30px 0 20px;
             padding: 0 15px;
+            position: relative;
         }
         
         .section-title h2 {
@@ -257,11 +653,77 @@
             font-size: 1.8rem;
             color: var(--primary);
             margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+            animation: expandWidth 1s ease-out;
+        }
+        
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 50px; }
+        }
+        
+        .section-title h2 i {
+            color: var(--secondary);
+            animation: spin 3s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0); }
+            100% { transform: rotate(360deg); }
         }
         
         .section-title p {
             color: var(--gray);
             font-size: 0.95rem;
+            animation: fadeIn 0.8s ease-out 0.3s both;
+        }
+        
+        /* Category Sections - Improved */
+        .category-section {
+            padding: 20px 15px;
+        }
+        
+        .subcategory-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            animation: slideInLeft 0.5s ease-out;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .subcategory-title i {
+            color: var(--secondary);
         }
         
         /* Products Grid */
@@ -272,7 +734,7 @@
             margin: 0 15px 30px;
         }
         
-        /* Product Card */
+        /* Product Card - Improved */
         .product-card {
             background: white;
             border-radius: var(--radius);
@@ -280,10 +742,23 @@
             box-shadow: var(--shadow);
             transition: var(--transition);
             position: relative;
+            animation: cardAppear 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
         
         .product-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-8px) scale(1.02);
             box-shadow: var(--shadow-hover);
         }
         
@@ -296,6 +771,7 @@
             font-weight: 600;
             font-size: 12px;
             z-index: 2;
+            animation: bounce 2s infinite;
         }
         
         .product-badge.featured {
@@ -305,6 +781,16 @@
         
         .product-badge.new {
             background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+        }
+        
+        .product-badge.discount {
+            background: linear-gradient(135deg, #FF4757 0%, #FF3838 100%);
+            color: white;
+        }
+        
+        .product-badge.out-of-stock {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
             color: white;
         }
         
@@ -364,6 +850,11 @@
             margin-bottom: 15px;
         }
         
+        .price-container {
+            display: flex;
+            flex-direction: column;
+        }
+        
         .price {
             font-size: 1.2rem;
             font-weight: 700;
@@ -373,31 +864,66 @@
             gap: 3px;
         }
         
+        .price.old-price {
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-decoration: line-through;
+            font-weight: 400;
+        }
+        
         .price-unit {
             font-size: 0.9rem;
             color: var(--gray);
         }
         
+        /* Order Button - Improved for Mobile */
         .order-btn {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 8px;
             font-weight: 500;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             width: 100%;
+            min-height: 36px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .order-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .order-btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
         
         .order-btn:hover {
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
             transform: translateY(-2px);
+        }
+        
+        .order-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
         }
         
         /* Cart Floating Button */
@@ -418,10 +944,17 @@
             z-index: 900;
             cursor: pointer;
             transition: var(--transition);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
         
         .cart-float:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(10deg);
+            animation: none;
         }
         
         .cart-float-badge {
@@ -438,6 +971,7 @@
             justify-content: center;
             font-size: 12px;
             font-weight: 700;
+            animation: pulse 1.5s infinite;
         }
         
         /* Bottom Navigation */
@@ -452,6 +986,12 @@
             justify-content: space-around;
             padding: 12px 0;
             z-index: 950;
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
         }
         
         .nav-item {
@@ -462,11 +1002,32 @@
             color: var(--gray);
             font-size: 12px;
             transition: var(--transition);
+            flex: 1;
+            position: relative;
+            padding: 5px;
+        }
+        
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+        
+        .nav-item.active::after {
+            width: 30px;
         }
         
         .nav-item i {
             font-size: 20px;
             margin-bottom: 5px;
+            transition: var(--transition);
         }
         
         .nav-item.active {
@@ -475,6 +1036,7 @@
         
         .nav-item.active i {
             color: var(--primary);
+            transform: scale(1.2);
         }
         
         /* Cart Modal */
@@ -489,6 +1051,7 @@
             z-index: 9999;
             justify-content: center;
             align-items: center;
+            animation: fadeIn 0.3s ease-out;
         }
         
         .cart-content {
@@ -502,6 +1065,18 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            animation: modalSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .cart-header {
@@ -514,12 +1089,21 @@
         .cart-header h2 {
             color: var(--primary);
             font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .close-cart {
             font-size: 30px;
             cursor: pointer;
             color: var(--gray);
+            transition: var(--transition);
+        }
+        
+        .close-cart:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
         }
         
         .cart-items {
@@ -535,6 +1119,7 @@
             align-items: center;
             padding: 15px 0;
             border-bottom: 1px solid #eee;
+            animation: slideInRight 0.3s ease-out;
         }
         
         .cart-item-info {
@@ -574,6 +1159,13 @@
             justify-content: center;
             cursor: pointer;
             color: var(--dark);
+            transition: var(--transition);
+        }
+        
+        .qty-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
         }
         
         .cart-item-remove {
@@ -581,6 +1173,14 @@
             border: none;
             color: #ff4757;
             cursor: pointer;
+            transition: var(--transition);
+            padding: 5px;
+            border-radius: 50%;
+        }
+        
+        .cart-item-remove:hover {
+            background: #ffebee;
+            transform: rotate(90deg);
         }
         
         .cart-total {
@@ -588,13 +1188,19 @@
             padding: 15px;
             border-radius: var(--radius);
             margin-bottom: 15px;
+            animation: fadeIn 0.5s ease-out;
         }
         
         .total-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
+            animation: slideInLeft 0.3s ease-out;
         }
+        
+        .total-row:nth-child(1) { animation-delay: 0.1s; }
+        .total-row:nth-child(2) { animation-delay: 0.2s; }
+        .total-row:nth-child(3) { animation-delay: 0.3s; }
         
         .total-amount {
             font-size: 1.5rem;
@@ -606,6 +1212,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
+            animation: fadeIn 0.5s ease-out 0.3s both;
         }
         
         .cart-actions .btn {
@@ -613,7 +1220,7 @@
             font-size: 14px;
         }
         
-        /* About Section */
+        /* About Section - Improved with Images */
         .about-section {
             padding: 20px 15px;
         }
@@ -624,12 +1231,17 @@
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             margin-bottom: 20px;
+            overflow: hidden;
+            animation: cardAppear 0.5s ease-out;
         }
         
         .about-card h3 {
             color: var(--primary);
             margin-bottom: 15px;
             font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .about-card p {
@@ -638,7 +1250,27 @@
             margin-bottom: 15px;
         }
         
-        /* Contact Section */
+        .about-image {
+            width: 100%;
+            height: 200px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin: 15px 0;
+            position: relative;
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .about-image:hover img {
+            transform: scale(1.1);
+        }
+        
+        /* Contact Section - Improved */
         .contact-section {
             padding: 20px 15px;
         }
@@ -649,6 +1281,7 @@
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             margin-bottom: 20px;
+            animation: cardAppear 0.5s ease-out;
         }
         
         .contact-info {
@@ -662,6 +1295,14 @@
             align-items: center;
             gap: 15px;
             color: var(--gray);
+            transition: var(--transition);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .contact-item:hover {
+            background: var(--light);
+            transform: translateX(10px);
         }
         
         .contact-item i {
@@ -670,17 +1311,34 @@
             font-size: 18px;
         }
         
-        /* Category Sections */
-        .category-section {
-            padding: 20px 15px;
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            margin-bottom: 15px;
+            transition: var(--transition);
         }
         
-        .subcategory-title {
-            font-size: 1.3rem;
-            color: var(--primary);
-            margin: 25px 0 15px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #f0f0f0;
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .contact-form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .contact-form-buttons .btn {
+            flex: 1;
         }
         
         /* Books Section */
@@ -699,6 +1357,13 @@
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
+            transition: var(--transition);
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .book-category-title:hover {
+            transform: translateX(10px);
+            box-shadow: var(--shadow-hover);
         }
         
         .book-category-title i {
@@ -716,7 +1381,7 @@
             margin-bottom: 30px;
             max-height: 1000px;
             overflow: hidden;
-            transition: max-height 0.5s ease;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .books-grid.collapsed {
@@ -731,24 +1396,38 @@
             transition: var(--transition);
             text-align: center;
             padding: 15px;
+            animation: cardAppear 0.5s ease-out;
         }
         
         .book-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) rotate(2deg);
             box-shadow: var(--shadow-hover);
         }
         
-        .book-icon {
-            width: 60px;
-            height: 60px;
+        .book-image {
+            width: 100%;
+            height: 160px;
             background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            border-radius: 50%;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 15px;
             color: white;
             font-size: 24px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .book-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .book-card:hover .book-image img {
+            transform: scale(1.1);
         }
         
         .book-name {
@@ -772,6 +1451,7 @@
             border-radius: 20px;
             font-size: 11px;
             font-weight: 500;
+            transition: var(--transition);
         }
         
         .available {
@@ -782,6 +1462,146 @@
         .borrowed {
             background: #ffebee;
             color: #c62828;
+        }
+        
+        /* Product Availability Toggle */
+        .availability-toggle {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 2;
+            background: rgba(255,255,255,0.9);
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .availability-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .availability-toggle.in-stock {
+            color: #2e7d32;
+        }
+        
+        .availability-toggle.out-of-stock {
+            color: #c62828;
+        }
+        
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: white;
+            padding: 40px 15px 20px;
+            margin-top: 30px;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .footer-section {
+            margin-bottom: 15px;
+            animation: slideInUp 0.5s ease-out;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+            animation: slideInLeft 0.3s ease-out;
+        }
+        
+        .footer-links li:nth-child(1) { animation-delay: 0.1s; }
+        .footer-links li:nth-child(2) { animation-delay: 0.2s; }
+        .footer-links li:nth-child(3) { animation-delay: 0.3s; }
+        .footer-links li:nth-child(4) { animation-delay: 0.4s; }
+        .footer-links li:nth-child(5) { animation-delay: 0.5s; }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(10px);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .social-link:nth-child(1) { animation-delay: 0.1s; }
+        .social-link:nth-child(2) { animation-delay: 0.2s; }
+        .social-link:nth-child(3) { animation-delay: 0.3s; }
+        .social-link:nth-child(4) { animation-delay: 0.4s; }
+        
+        .social-link:hover {
+            background: var(--accent);
+            color: var(--dark);
+            transform: translateY(-5px) rotate(10deg);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            margin-top: 20px;
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            animation: fadeIn 0.8s ease-out 0.5s both;
+        }
+        
+        .footer-bottom a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-bottom a:hover {
+            text-decoration: underline;
+            transform: scale(1.05);
         }
         
         /* Loading Animation */
@@ -797,12 +1617,12 @@
             align-items: center;
             justify-content: center;
             z-index: 10000;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
         
         .loading.hidden {
             opacity: 0;
-            pointer-events: none;
+            visibility: hidden;
         }
         
         .loader {
@@ -811,37 +1631,68 @@
             border: 3px solid var(--light);
             border-top-color: var(--primary);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
             margin-bottom: 20px;
+            position: relative;
         }
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .loader::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 3px solid transparent;
+            border-top-color: var(--secondary);
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite reverse;
         }
         
         /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
         .animate {
-            animation: fadeIn 0.4s ease-out;
+            animation: fadeIn 0.5s ease-out;
         }
         
         /* Scrollbar */
         ::-webkit-scrollbar {
-            width: 5px;
+            width: 8px;
         }
         
         ::-webkit-scrollbar-track {
             background: #f1f1f1;
+            border-radius: 10px;
         }
         
         ::-webkit-scrollbar-thumb {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+        }
+        
+        /* Page Title */
+        .page-title {
+            margin: 20px 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: var(--radius);
+            color: white;
+            text-align: center;
+            animation: fadeInScale 0.6s ease-out;
+        }
+        
+        .page-title h2 {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .page-title p {
+            opacity: 0.9;
+            font-size: 0.95rem;
         }
         
         /* Responsive */
@@ -851,6 +1702,10 @@
                 margin: 0 auto;
             }
             
+            .logo-text {
+                display: block; /* Show on larger screens */
+            }
+            
             .products-grid {
                 grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
                 gap: 20px;
@@ -858,6 +1713,56 @@
             
             .books-grid {
                 grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            
+            .hero-buttons {
+                flex-direction: row;
+                justify-content: center;
+                gap: 20px;
+            }
+            
+            .hero p {
+                max-width: 500px;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 15px;
+            }
+            
+            .gallery-item {
+                height: 150px;
+            }
+            
+            .contact-form-buttons {
+                flex-direction: row;
+            }
+            
+            .footer-content {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            
+            .footer-section {
+                flex: 1;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 700px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .gallery-item {
+                height: 180px;
             }
         }
     </style>
@@ -877,8 +1782,8 @@
                 <i class="fas fa-book-open"></i>
             </div>
             <div class="logo-text">
-                <h1>روايات</h1>
-                <span>Coffee & Books Experience</span>
+                <h1 id="headerTitle">روايات</h1>
+                <span id="headerSubtitle">Coffee & Books Experience</span>
             </div>
         </div>
         
@@ -888,6 +1793,12 @@
             <span></span>
         </div>
     </header>
+    
+    <!-- Currency Selector -->
+    <div class="currency-selector">
+        <button class="currency-btn active" onclick="setCurrency('usd')">USD</button>
+        <button class="currency-btn" onclick="setCurrency('lbp')">LBP</button>
+    </div>
     
     <!-- Mobile Menu -->
     <nav class="mobile-menu" id="mobileMenu">
@@ -934,30 +1845,72 @@
     <main class="main-content">
         <!-- Home Section -->
         <section id="home-section" class="section">
-            <div class="hero animate">
-                <h2>روايات Coffee Shop</h2>
-                <p>Enjoy premium drinks with a unique reading experience. Read your favorite books while sipping the best coffee.</p>
-                <button class="btn btn-primary" onclick="showSection('hot-drinks')">
-                    <i class="fas fa-mug-hot"></i> Order Now
-                </button>
-                <button class="btn btn-secondary" style="margin-left: 10px;" onclick="showSection('books')">
-                    <i class="fas fa-book"></i> Browse Books
-                </button>
+            <div class="hero">
+                <div class="hero-content">
+                    <h2>روايات Coffee Shop</h2>
+                    <div class="hero-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Tripoli, Lebanon - City Complex
+                    </div>
+                    <p>Enjoy premium drinks with a unique reading experience. Read your favorite books while sipping the best coffee in Tripoli.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="showSection('hot-drinks')">
+                            <i class="fas fa-mug-hot"></i> Order Now
+                        </button>
+                        <button class="btn btn-secondary" onclick="showSection('books')">
+                            <i class="fas fa-book"></i> Browse Books
+                        </button>
+                    </div>
+                </div>
             </div>
             
-            <!-- Featured Products -->
-            <div class="section-title">
-                <h2>Featured Products</h2>
-                <p>Our most popular drinks</p>
+            <!-- Image Gallery -->
+            <div class="image-gallery">
+                <div class="gallery-grid">
+                    <div class="gallery-item" onclick="showSection('hot-drinks')">
+                        <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400&h=300&fit=crop" alt="Hot Drinks">
+                        <div class="gallery-overlay">Hot Drinks</div>
+                    </div>
+                    <div class="gallery-item" onclick="showSection('cold-drinks')">
+                        <img src="https://images.unsplash.com/photo-1471424187104-3b2d665cf114?w=400&h=300&fit=crop" alt="Cold Drinks">
+                        <div class="gallery-overlay">Cold Drinks</div>
+                    </div>
+                    <div class="gallery-item" onclick="showSection('snacks')">
+                        <img src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400&h=300&fit=crop" alt="Snacks">
+                        <div class="gallery-overlay">Snacks</div>
+                    </div>
+                    <div class="gallery-item" onclick="showSection('books')">
+                        <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop" alt="Books">
+                        <div class="gallery-overlay">Books</div>
+                    </div>
+                </div>
             </div>
             
-            <div class="products-grid" id="featured-products">
-                <!-- Featured products will load here -->
+            <!-- Map Section -->
+            <div class="map-section animate">
+                <div class="map-header">
+                    <h3><i class="fas fa-map-marked-alt"></i> Our Location</h3>
+                    <button class="btn btn-small btn-map" onclick="openGoogleMaps()">
+                        <i class="fab fa-google"></i> Open in Maps
+                    </button>
+                </div>
+                <div class="map-container">
+                    <div class="map-placeholder" onclick="openGoogleMaps()">
+                        <i class="fas fa-map"></i>
+                        <p>Click to open location in Google Maps</p>
+                    </div>
+                    <div class="map-address">
+                        <h4><i class="fas fa-location-dot"></i> Address Details:</h4>
+                        <p><strong>روايات Coffee Shop</strong><br>
+                        City Complex, Tripoli, Lebanon<br>
+                        Opening Hours: 7:00 AM - 11:00 PM</p>
+                    </div>
+                </div>
             </div>
             
             <!-- Categories -->
             <div class="section-title">
-                <h2>Our Categories</h2>
+                <h2><i class="fas fa-th-large"></i> Our Categories</h2>
                 <p>Browse our menu</p>
             </div>
             
@@ -998,8 +1951,8 @@
         
         <!-- Hot Drinks Section -->
         <section id="hot-drinks-section" class="section" style="display: none;">
-            <div class="section-title">
-                <h2>Hot Drinks</h2>
+            <div class="page-title">
+                <h2><i class="fas fa-mug-hot"></i> Hot Drinks</h2>
                 <p>Warm and comforting beverages</p>
             </div>
             
@@ -1010,38 +1963,38 @@
         
         <!-- Cold Drinks Section -->
         <section id="cold-drinks-section" class="section" style="display: none;">
-            <div class="section-title">
-                <h2>Cold Drinks</h2>
+            <div class="page-title">
+                <h2><i class="fas fa-glass-whiskey"></i> Cold Drinks</h2>
                 <p>Refreshing beverages for any time</p>
             </div>
             
             <div class="category-section">
-                <h3 class="subcategory-title">Coffee</h3>
+                <h3 class="subcategory-title"><i class="fas fa-coffee"></i> Coffee</h3>
                 <div class="products-grid" id="cold-coffee-products">
                     <!-- Cold coffee will load here -->
                 </div>
                 
-                <h3 class="subcategory-title">Tea</h3>
+                <h3 class="subcategory-title"><i class="fas fa-leaf"></i> Tea</h3>
                 <div class="products-grid" id="cold-tea-products">
                     <!-- Cold tea will load here -->
                 </div>
                 
-                <h3 class="subcategory-title">Fresh Juice</h3>
+                <h3 class="subcategory-title"><i class="fas fa-wine-glass-alt"></i> Fresh Juice</h3>
                 <div class="products-grid" id="fresh-juice-products">
                     <!-- Fresh juice will load here -->
                 </div>
                 
-                <h3 class="subcategory-title">Soft Drinks</h3>
+                <h3 class="subcategory-title"><i class="fas fa-glass-whiskey"></i> Soft Drinks</h3>
                 <div class="products-grid" id="soft-drink-products">
                     <!-- Soft drinks will load here -->
                 </div>
                 
-                <h3 class="subcategory-title">Energy Drinks</h3>
+                <h3 class="subcategory-title"><i class="fas fa-bolt"></i> Energy Drinks</h3>
                 <div class="products-grid" id="energy-drink-products">
                     <!-- Energy drinks will load here -->
                 </div>
                 
-                <h3 class="subcategory-title">Water</h3>
+                <h3 class="subcategory-title"><i class="fas fa-tint"></i> Water</h3>
                 <div class="products-grid" id="water-products">
                     <!-- Water will load here -->
                 </div>
@@ -1050,28 +2003,28 @@
         
         <!-- Snacks Section -->
         <section id="snacks-section" class="section" style="display: none;">
-            <div class="section-title">
-                <h2>Snacks</h2>
+            <div class="page-title">
+                <h2><i class="fas fa-cookie-bite"></i> Snacks</h2>
                 <p>Delicious snacks to accompany your drink</p>
             </div>
             
             <div class="category-section">
-                <h3 class="subcategory-title">Chips & Crackers</h3>
+                <h3 class="subcategory-title"><i class="fas fa-utensils"></i> Chips & Crackers</h3>
                 <div class="products-grid" id="chips-products">
                     <!-- Chips will load here -->
                 </div>
                 
-                <h3 class="subcategory-title">Chocolate</h3>
+                <h3 class="subcategory-title"><i class="fas fa-candy-cane"></i> Chocolate</h3>
                 <div class="products-grid" id="chocolate-products">
                     <!-- Chocolate will load here -->
                 </div>
                 
-                <h3 class="subcategory-title">Pastries</h3>
+                <h3 class="subcategory-title"><i class="fas fa-birthday-cake"></i> Pastries</h3>
                 <div class="products-grid" id="pastry-products">
                     <!-- Pastries will load here -->
                 </div>
                 
-                <h3 class="subcategory-title">Healthy Snacks</h3>
+                <h3 class="subcategory-title"><i class="fas fa-heart"></i> Healthy Snacks</h3>
                 <div class="products-grid" id="healthy-snack-products">
                     <!-- Healthy snacks will load here -->
                 </div>
@@ -1080,8 +2033,8 @@
         
         <!-- Books Section -->
         <section id="books-section" class="section" style="display: none;">
-            <div class="section-title">
-                <h2>Books for Reading</h2>
+            <div class="page-title">
+                <h2><i class="fas fa-book"></i> Books for Reading</h2>
                 <p>Enjoy reading our collection while sipping your favorite drink</p>
             </div>
             
@@ -1130,41 +2083,62 @@
         
         <!-- About Section -->
         <section id="about-section" class="section" style="display: none;">
+            <div class="page-title">
+                <h2><i class="fas fa-info-circle"></i> About Us</h2>
+                <p>Learn more about روايات Coffee Shop</p>
+            </div>
+            
             <div class="about-section">
                 <div class="about-card animate">
-                    <h3>About روايات Coffee Shop</h3>
-                    <p>Welcome to روايات, where we combine the love for premium beverages with the joy of reading. Our mission is to provide you with a perfect cup of coffee and a delightful reading experience every time you visit.</p>
-                    <p>We source our coffee beans from the best regions around the world and prepare each drink with care and passion. Our book collection is carefully curated to offer something for every reader.</p>
+                    <h3><i class="fas fa-info-circle"></i> About روايات Coffee Shop</h3>
+                    <div class="about-image">
+                        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&auto=format&fit=crop" alt="Coffee Shop Interior">
+                    </div>
+                    <p>Welcome to <strong>روايات Coffee Shop</strong>, located in the heart of Tripoli, Lebanon. We combine the love for premium beverages with the joy of reading. Our mission is to provide you with a perfect cup of coffee and a delightful reading experience every time you visit.</p>
+                    <p>We source our coffee beans from the best regions around the world and prepare each drink with care and passion. Our book collection is carefully curated to offer something for every reader, from classic literature to modern bestsellers.</p>
                 </div>
                 
                 <div class="about-card animate">
-                    <h3>Our Values</h3>
-                    <p>• Quality: We use only premium ingredients</p>
-                    <p>• Knowledge: Promoting reading culture</p>
-                    <p>• Environment: Cozy and welcoming atmosphere for reading</p>
-                    <p>• Innovation: Constantly updating our menu and book collection</p>
+                    <h3><i class="fas fa-heart"></i> Our Values</h3>
+                    <div class="about-image">
+                        <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&auto=format&fit=crop" alt="Coffee Beans">
+                    </div>
+                    <p>• <strong>Quality:</strong> We use only premium ingredients and ethically sourced coffee beans</p>
+                    <p>• <strong>Knowledge:</strong> Promoting reading culture in our community</p>
+                    <p>• <strong>Environment:</strong> Cozy and welcoming atmosphere for reading and relaxation</p>
+                    <p>• <strong>Innovation:</strong> Constantly updating our menu and book collection</p>
+                    <p>• <strong>Community:</strong> Supporting local artists and writers</p>
                 </div>
                 
                 <div class="about-card animate">
-                    <h3>Working Hours</h3>
-                    <p>Monday - Friday: 7:00 AM - 10:00 PM</p>
-                    <p>Saturday: 8:00 AM - 11:00 PM</p>
-                    <p>Sunday: 8:00 AM - 9:00 PM</p>
+                    <h3><i class="fas fa-clock"></i> Working Hours</h3>
+                    <div class="about-image">
+                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&auto=format&fit=crop" alt="Coffee Shop">
+                    </div>
+                    <p><strong>Monday - Friday:</strong> 7:00 AM - 10:00 PM</p>
+                    <p><strong>Saturday:</strong> 8:00 AM - 11:00 PM</p>
+                    <p><strong>Sunday:</strong> 8:00 AM - 9:00 PM</p>
+                    <p><em>Extended hours during Ramadan and holidays</em></p>
                 </div>
             </div>
         </section>
         
         <!-- Contact Section -->
         <section id="contact-section" class="section" style="display: none;">
+            <div class="page-title">
+                <h2><i class="fas fa-phone-alt"></i> Contact Us</h2>
+                <p>Get in touch with روايات Coffee Shop</p>
+            </div>
+            
             <div class="contact-section">
                 <div class="contact-card animate">
-                    <h3>Contact Information</h3>
+                    <h3><i class="fas fa-address-card"></i> Contact Information</h3>
                     <div class="contact-info">
                         <div class="contact-item">
                             <i class="fas fa-phone-alt"></i>
                             <div>
                                 <strong>Phone Number</strong>
-                                <p>+965 7176 1705</p>
+                                <p>+961 71 761 705</p>
                             </div>
                         </div>
                         
@@ -1172,7 +2146,7 @@
                             <i class="fab fa-whatsapp"></i>
                             <div>
                                 <strong>WhatsApp for Orders</strong>
-                                <p>+965 7176 1705</p>
+                                <p>+961 71 761 705</p>
                             </div>
                         </div>
                         
@@ -1188,35 +2162,82 @@
                             <i class="fas fa-map-marker-alt"></i>
                             <div>
                                 <strong>Address</strong>
-                                <p>123 Book Street, Kuwait City, Kuwait</p>
+                                <p>City Complex, Tripoli, Lebanon</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <strong>Business Hours</strong>
+                                <p>7:00 AM - 11:00 PM Daily</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="contact-card animate">
-                    <h3>Send us a Message</h3>
-                    <div style="margin-top: 20px;">
-                        <div style="margin-bottom: 15px;">
-                            <input type="text" placeholder="Your Name" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;">
-                        </div>
+                    <h3><i class="fas fa-paper-plane"></i> Send us a Message</h3>
+                    <div class="contact-form">
+                        <input type="text" id="contactName" placeholder="Your Name" required>
+                        <input type="email" id="contactEmail" placeholder="Your Email" required>
+                        <input type="tel" id="contactPhone" placeholder="Your Phone Number">
+                        <textarea id="contactMessage" placeholder="Your Message" rows="4" required></textarea>
                         
-                        <div style="margin-bottom: 15px;">
-                            <input type="email" placeholder="Your Email" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;">
+                        <div class="contact-form-buttons">
+                            <button class="btn btn-primary" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                            <button class="btn" onclick="sendWhatsAppMessage()" style="background: #25D366; color: white;">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
                         </div>
-                        
-                        <div style="margin-bottom: 20px;">
-                            <textarea placeholder="Your Message" rows="4" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; resize: none;"></textarea>
-                        </div>
-                        
-                        <button class="btn btn-primary" style="width: 100%;" onclick="sendMessage()">
-                            <i class="fas fa-paper-plane"></i> Send Message
-                        </button>
                     </div>
                 </div>
             </div>
         </section>
     </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3><i class="fas fa-book-open"></i> روايات Coffee Shop</h3>
+                <p>A unique blend of premium coffee and curated books in the heart of Tripoli, Lebanon.</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/mohammad.hallak.287951/" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.facebook.com/mohammad.hallak.287951/" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="https://x.com/Mohamma4893376" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="www.tiktok.com/@mohammadhallak571" class="social-link"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3><i class="fas fa-link"></i> Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#" onclick="showSection('home')"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="#" onclick="showSection('hot-drinks')"><i class="fas fa-chevron-right"></i> Hot Drinks</a></li>
+                    <li><a href="#" onclick="showSection('cold-drinks')"><i class="fas fa-chevron-right"></i> Cold Drinks</a></li>
+                    <li><a href="#" onclick="showSection('snacks')"><i class="fas fa-chevron-right"></i> Snacks</a></li>
+                    <li><a href="#" onclick="showSection('books')"><i class="fas fa-chevron-right"></i> Books</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3><i class="fas fa-info-circle"></i> Information</h3>
+                <ul class="footer-links">
+                    <li><a href="#" onclick="showSection('about')"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                    <li><a href="#" onclick="showSection('contact')"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Terms & Conditions</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2023 روايات Coffee Shop. All rights reserved. | Designed by <a href="#">Mohammed Hallak</a></p>
+        </div>
+    </footer>
     
     <!-- Cart Floating Button -->
     <div class="cart-float" onclick="openCart()">
@@ -1288,7 +2309,7 @@
 
     <script>
     // ═══════════════════════════════════════════════════════
-    // EDIT PRODUCTS HERE - قم بتحرير المنتجات هنا
+    // PRODUCTS DATA - PRODUCTS DATA
     // ═══════════════════════════════════════════════════════
     const products = [
         // Hot Drinks
@@ -1296,67 +2317,79 @@
             id: 1,
             name: "Espresso",
             price: 3.50,
+            originalPrice: 4.00,
             image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=400&h=300&fit=crop",
             category: "hot-drinks",
             description: "Strong and rich coffee shot, perfect for a quick energy boost.",
-            featured: true,
+            featured: false,
             new: false,
-            inStock: true
+            inStock: true,
+            discount: true
         },
         {
             id: 2,
             name: "Cappuccino",
             price: 4.75,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400&h=300&fit=crop",
             category: "hot-drinks",
             description: "Perfect blend of espresso, steamed milk, and milk foam.",
-            featured: true,
+            featured: false,
             new: true,
-            inStock: true
+            inStock: true,
+            discount: false
         },
         {
             id: 3,
             name: "Latte",
             price: 5.00,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1568649929103-28ffbefaca1e?w=400&h=300&fit=crop",
             category: "hot-drinks",
             description: "Smooth espresso with steamed milk and light foam.",
-            featured: true,
+            featured: false,
             new: false,
-            inStock: true
+            inStock: true,
+            discount: false
         },
         {
             id: 4,
             name: "Americano",
             price: 3.75,
+            originalPrice: 4.25,
             image: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=400&h=300&fit=crop",
             category: "hot-drinks",
             description: "Espresso diluted with hot water, similar to drip coffee.",
             featured: false,
             new: true,
-            inStock: true
+            inStock: true,
+            discount: true
         },
         {
             id: 5,
             name: "Hot Chocolate",
             price: 4.50,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=300&fit=crop",
             category: "hot-drinks",
             description: "Rich and creamy chocolate drink with whipped cream.",
             featured: false,
             new: false,
-            inStock: true
+            inStock: true,
+            discount: false
         },
         {
             id: 6,
             name: "Chai Tea Latte",
             price: 4.75,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?w=400&h=300&fit=crop",
             category: "hot-drinks",
             description: "Spiced tea with steamed milk and honey.",
-            featured: true,
+            featured: false,
             new: true,
-            inStock: true
+            inStock: false,
+            discount: false
         },
         
         // Cold Drinks - Coffee
@@ -1364,34 +2397,40 @@
             id: 7,
             name: "Iced Coffee",
             price: 4.25,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop",
             category: "cold-coffee",
             description: "Chilled coffee served with ice cubes.",
-            featured: true,
+            featured: false,
             new: true,
-            inStock: true
+            inStock: false,
+            discount: false
         },
         {
             id: 8,
             name: "Iced Latte",
             price: 5.50,
-            image: "https://images.unsplash.com/photo-1471424187104-3b2d665cf114?w=400&h=300&fit=crop",
+            originalPrice: 6.00,
+            image: "https://myeverydaytable.com/wp-content/uploads/ICEDLATTE_0_4.jpg",
             category: "cold-coffee",
             description: "Espresso with cold milk and ice.",
-            featured: true,
+            featured: false,
             new: false,
-            inStock: true
+            inStock: false,
+            discount: true
         },
         {
             id: 9,
             name: "Cold Brew",
             price: 5.00,
-            image: "https://images.unsplash.com/photo-1559526324-c1f275fbfa32?w=400&h=300&fit=crop",
+            originalPrice: null,
+            image: "https://hips.hearstapps.com/hmg-prod/images/delish-210419-iced-tea-02-landscape-jg-1619020612.jpg?crop=0.670xw:1.00xh;0.176xw,0&resize=1200:*",
             category: "cold-coffee",
             description: "Slow-steeped coffee for 12-24 hours.",
             featured: false,
             new: true,
-            inStock: true
+            inStock: false,
+            discount: false
         },
         
         // Cold Drinks - Tea
@@ -1399,23 +2438,27 @@
             id: 10,
             name: "Iced Tea",
             price: 3.50,
-            image: "https://images.unsplash.com/photo-1560704903-2c551d5f1166?w=400&h=300&fit=crop",
+            originalPrice: null,
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9rVdPDDEDNkCyNyd5RLWlpPEp2WEhT4a9mA&s",
             category: "cold-tea",
             description: "Refreshing tea served chilled with lemon.",
             featured: false,
             new: false,
-            inStock: true
+            inStock: false,
+            discount: false
         },
         {
             id: 11,
             name: "Iced Matcha",
             price: 5.75,
-            image: "https://images.unsplash.com/photo-1561047029-3000c68339ca?w=400&h=300&fit=crop",
+            originalPrice: 6.50,
+            image: "https://www.foodandwine.com/thmb/2tI8aL1Z8hKhfV48_c8b6uWG-TQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Iced-Matcha-Latte-FT-RECIPE0622-2000-9c2e116d3bc54bdaacda10e62e8e0205.jpg",
             category: "cold-tea",
             description: "Japanese green tea powder with milk.",
             featured: false,
             new: true,
-            inStock: true
+            inStock: false,
+            discount: true
         },
         
         // Cold Drinks - Fresh Juice
@@ -1423,34 +2466,40 @@
             id: 12,
             name: "Orange Juice",
             price: 4.00,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400&h=300&fit=crop",
             category: "fresh-juice",
             description: "Freshly squeezed orange juice.",
-            featured: true,
+            featured: false,
             new: true,
-            inStock: true
+            inStock: false,
+            discount: false
         },
         {
             id: 13,
             name: "Apple Juice",
             price: 4.00,
-            image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&h=300&fit=crop",
+            originalPrice: null,
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFQdHX2B1SewNvODUw1virT7ISiznSKLNbIA&s",
             category: "fresh-juice",
             description: "Fresh apple juice with no added sugar.",
             featured: false,
             new: false,
-            inStock: true
+            inStock: false,
+            discount: false
         },
         {
             id: 14,
             name: "Mixed Fruit Juice",
             price: 4.50,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1502741224143-90386d7f8c82?w=400&h=300&fit=crop",
             category: "fresh-juice",
             description: "Blend of seasonal fresh fruits.",
-            featured: true,
+            featured: false,
             new: true,
-            inStock: true
+            inStock: false,
+            discount: false
         },
         
         // Cold Drinks - Soft Drinks
@@ -1458,60 +2507,70 @@
             id: 15,
             name: "Cola",
             price: 2.50,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&h=300&fit=crop",
             category: "soft-drink",
             description: "Classic carbonated soft drink.",
             featured: false,
             new: false,
-            inStock: true
+            inStock: false,
+            discount: false
         },
         {
             id: 16,
             name: "Lemon Soda",
             price: 3.00,
-            image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400&h=300&fit=crop",
+            originalPrice: 3.50,
+            image: "https://arecipeforfun.com/wp-content/uploads/2023/07/edits-italian-lemon-soda-limonata-1-2-500x500.jpg",
             category: "soft-drink",
             description: "Refreshing lemon flavored soda.",
-            featured: true,
+            featured: false,
             new: true,
-            inStock: true
+            inStock: false,
+            discount: true
         },
         
         // Cold Drinks - Energy Drinks
         {
             id: 17,
-            name: "Energy Drink",
+            name: "Red Bull",
             price: 4.00,
-            image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=300&fit=crop",
+            originalPrice: null,
+            image: "https://static.independent.co.uk/s3fs-public/thumbnails/image/2018/08/30/11/istock-537022544.jpg?width=1200",
             category: "energy-drink",
             description: "Boost your energy with this drink.",
             featured: false,
             new: true,
-            inStock: true
+            inStock: true,
+            discount: false
         },
         
         // Cold Drinks - Water
         {
             id: 18,
-            name: "Mineral Water",
+            name: "Tannourin Water",
             price: 1.50,
-            image: "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=400&h=300&fit=crop",
+            originalPrice: null,
+            image: "https://autobarlb.com/cdn/shop/products/20201001_130228.jpg?v=1601546606",
             category: "water",
             description: "Pure bottled mineral water.",
             featured: false,
             new: false,
-            inStock: true
+            inStock: true,
+            discount: false
         },
         {
             id: 19,
-            name: "Sparkling Water",
+            name: "Aliya water",
             price: 2.00,
-            image: "https://images.unsplash.com/photo-1548839149-6e1f28c5e5c8?w=400&h=300&fit=crop",
+            originalPrice: null,
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSv34z8FVSpJgv25lrF6niT9U-vfHSGJtMD7A&s",
             category: "water",
             description: "Carbonated water with natural minerals.",
-            featured: true,
+            featured: false,
             new: true,
-            inStock: true
+            inStock: true,
+            discount: false
         },
         
         // Snacks - Chips & Crackers
@@ -1519,23 +2578,27 @@
             id: 20,
             name: "Potato Chips",
             price: 2.50,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=400&h=300&fit=crop",
             category: "chips",
             description: "Classic salted potato chips.",
-            featured: true,
+            featured: false,
             new: true,
-            inStock: true
+            inStock: true,
+            discount: false
         },
         {
             id: 21,
             name: "Cheese Crackers",
             price: 3.00,
+            originalPrice: 3.50,
             image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop",
             category: "chips",
             description: "Cheese flavored crispy crackers.",
             featured: false,
             new: false,
-            inStock: true
+            inStock: true,
+            discount: true
         },
         
         // Snacks - Chocolate
@@ -1543,34 +2606,40 @@
             id: 22,
             name: "Milk Chocolate Bar",
             price: 3.50,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1511381939415-e44015466834?w=400&h=300&fit=crop",
             category: "chocolate",
             description: "Creamy milk chocolate bar.",
-            featured: true,
+            featured: false,
             new: true,
-            inStock: true
+            inStock: true,
+            discount: false
         },
         {
             id: 23,
             name: "Dark Chocolate",
             price: 4.00,
+            originalPrice: 4.50,
             image: "https://images.unsplash.com/photo-1548907043-215667d6440e?w=400&h=300&fit=crop",
             category: "chocolate",
             description: "70% dark chocolate bar.",
             featured: false,
             new: false,
-            inStock: true
+            inStock: true,
+            discount: true
         },
         {
             id: 24,
             name: "Chocolate Truffles",
             price: 5.50,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1606313564200-75f2d4fa383b?w=400&h=300&fit=crop",
             category: "chocolate",
             description: "Assorted chocolate truffles.",
-            featured: true,
+            featured: false,
             new: true,
-            inStock: true
+            inStock: false,
+            discount: false
         },
         
         // Snacks - Pastries
@@ -1578,34 +2647,40 @@
             id: 25,
             name: "Croissant",
             price: 3.50,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1555507036-ab794f27d2e9?w=400&h=300&fit=crop",
             category: "pastry",
             description: "Freshly baked buttery French pastry.",
-            featured: true,
+            featured: false,
             new: true,
-            inStock: true
+            inStock: true,
+            discount: false
         },
         {
             id: 26,
             name: "Chocolate Chip Cookie",
             price: 2.50,
+            originalPrice: 3.00,
             image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400&h=300&fit=crop",
             category: "pastry",
             description: "Soft cookie with chocolate chips.",
             featured: false,
             new: false,
-            inStock: true
+            inStock: true,
+            discount: true
         },
         {
             id: 27,
             name: "Blueberry Muffin",
             price: 3.25,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1576866209830-589e1bfbaa4d?w=400&h=300&fit=crop",
             category: "pastry",
             description: "Moist muffin with fresh blueberries.",
-            featured: true,
+            featured: false,
             new: true,
-            inStock: true
+            inStock: true,
+            discount: false
         },
         
         // Snacks - Healthy
@@ -1613,190 +2688,219 @@
             id: 28,
             name: "Fruit Salad",
             price: 5.50,
+            originalPrice: 6.00,
             image: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=400&h=300&fit=crop",
             category: "healthy-snack",
             description: "Fresh seasonal fruits mixed together.",
-            featured: true,
+            featured: false,
             new: false,
-            inStock: true
+            inStock: true,
+            discount: true
         },
         {
             id: 29,
             name: "Mixed Nuts",
             price: 4.50,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=300&fit=crop",
             category: "healthy-snack",
             description: "Assorted nuts and dried fruits.",
             featured: false,
             new: true,
-            inStock: true
+            inStock: true,
+            discount: false
         },
         {
             id: 30,
             name: "Granola Bar",
             price: 3.00,
+            originalPrice: null,
             image: "https://images.unsplash.com/photo-1533050487297-09b450131914?w=400&h=300&fit=crop",
             category: "healthy-snack",
             description: "Oats and honey granola bar.",
-            featured: true,
+            featured: false,
             new: true,
-            inStock: true
+            inStock: true,
+            discount: false
         }
     ];
     
-    // Books for reading (not for sale)
+    // Books for reading with images
     const books = [
         {
             id: 101,
             name: "The Alchemist",
             author: "Paulo Coelho",
             category: "novels",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=600&fit=crop"
         },
         {
             id: 102,
             name: "1984",
             author: "George Orwell",
             category: "novels",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&h=600&fit=crop"
         },
         {
             id: 103,
             name: "To Kill a Mockingbird",
             author: "Harper Lee",
             category: "novels",
-            status: "borrowed"
+            status: "borrowed",
+            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop"
         },
         {
             id: 104,
             name: "Pride and Prejudice",
             author: "Jane Austen",
             category: "novels",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=600&fit=crop"
         },
         {
             id: 105,
             name: "The Great Gatsby",
             author: "F. Scott Fitzgerald",
             category: "novels",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=600&fit=crop"
         },
         {
             id: 106,
             name: "Atomic Habits",
             author: "James Clear",
             category: "self-dev",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1531346688376-ab6275c4725e?w=400&h=600&fit=crop"
         },
         {
             id: 107,
             name: "The 7 Habits",
             author: "Stephen Covey",
             category: "self-dev",
-            status: "borrowed"
+            status: "borrowed",
+            image: "https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?w=400&h=600&fit=crop"
         },
         {
             id: 108,
             name: "Think and Grow Rich",
             author: "Napoleon Hill",
             category: "self-dev",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=600&fit=crop"
         },
         {
             id: 109,
             name: "The Power of Now",
             author: "Eckhart Tolle",
             category: "self-dev",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=600&fit=crop"
         },
         {
             id: 110,
             name: "It",
             author: "Stephen King",
             category: "horror",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&h=600&fit=crop"
         },
         {
             id: 111,
             name: "The Shining",
             author: "Stephen King",
             category: "horror",
-            status: "borrowed"
+            status: "borrowed",
+            image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=400&h=600&fit=crop"
         },
         {
             id: 112,
             name: "Dracula",
             author: "Bram Stoker",
             category: "horror",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?w=400&h=600&fit=crop"
         },
         {
             id: 113,
             name: "Frankenstein",
             author: "Mary Shelley",
             category: "horror",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=600&fit=crop"
         },
         {
             id: 114,
             name: "Sapiens",
             author: "Yuval Noah Harari",
             category: "history",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1531346688376-ab6275c4725e?w=400&h=600&fit=crop"
         },
         {
             id: 115,
             name: "The History of Islam",
             author: "Karen Armstrong",
             category: "history",
-            status: "borrowed"
+            status: "borrowed",
+            image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=600&fit=crop"
         },
         {
             id: 116,
             name: "Steve Jobs",
             author: "Walter Isaacson",
             category: "history",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=600&fit=crop"
         },
         {
             id: 117,
             name: "A Brief History of Time",
             author: "Stephen Hawking",
             category: "science",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&h=600&fit=crop"
         },
         {
             id: 118,
             name: "The Selfish Gene",
             author: "Richard Dawkins",
             category: "science",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop"
         },
         {
             id: 119,
             name: "Cosmos",
             author: "Carl Sagan",
             category: "science",
-            status: "borrowed"
+            status: "borrowed",
+            image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&h=600&fit=crop"
         },
         {
             id: 120,
             name: "The Innovators",
             author: "Walter Isaacson",
             category: "science",
-            status: "available"
+            status: "available",
+            image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=400&h=600&fit=crop"
         }
     ];
     
-    // Cart
+    // Global variables
     let cart = JSON.parse(localStorage.getItem('coffeeShopCart')) || [];
+    let currentCurrency = 'usd';
+    const exchangeRate = 1500; // 1 USD = 1500 LBP
     
     // Page load
     document.addEventListener('DOMContentLoaded', function() {
         // Hide loading screen
         setTimeout(() => {
             document.getElementById('loading').classList.add('hidden');
-        }, 1000);
+            document.body.style.overflow = 'auto';
+        }, 1500);
         
         // Load initial content
         renderHomePage();
@@ -1814,23 +2918,45 @@
                 toggleMenu();
             }
         });
+        
+        // Close cart when clicking outside
+        document.addEventListener('click', function(event) {
+            const cartModal = document.getElementById('cartModal');
+            const cartContent = document.querySelector('.cart-content');
+            
+            if (cartModal.style.display === 'flex' && !cartContent.contains(event.target) && 
+                !event.target.classList.contains('cart-float') && 
+                !event.target.closest('.cart-float')) {
+                closeCart();
+            }
+        });
     });
     
     // Toggle mobile menu
     function toggleMenu() {
         const menu = document.getElementById('mobileMenu');
+        const toggle = document.getElementById('menuToggle');
+        
         menu.classList.toggle('active');
+        toggle.classList.toggle('active');
     }
     
-    // Show sections
+    // Show sections with animations
     function showSection(section) {
-        // Hide all sections
+        // Hide all sections with animation
         document.querySelectorAll('.section').forEach(sec => {
-            sec.style.display = 'none';
+            if (sec.style.display !== 'none') {
+                sec.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => {
+                    sec.style.display = 'none';
+                    sec.style.animation = '';
+                }, 300);
+            }
         });
         
         // Close menu
         document.getElementById('mobileMenu').classList.remove('active');
+        document.getElementById('menuToggle').classList.remove('active');
         
         // Update menu links
         document.querySelectorAll('.menu-link').forEach(link => {
@@ -1842,51 +2968,148 @@
             navItem.classList.remove('active');
         });
         
-        // Show requested section
-        const sectionElement = document.getElementById(section + '-section');
-        if (sectionElement) {
-            sectionElement.style.display = 'block';
-            
-            // Add active class to corresponding nav items
-            if (section === 'home') {
+        // Update header title based on section
+        const headerTitle = document.getElementById('headerTitle');
+        const headerSubtitle = document.getElementById('headerSubtitle');
+        
+        switch(section) {
+            case 'home':
+                headerTitle.textContent = 'روايات';
+                headerSubtitle.textContent = 'Coffee & Books Experience';
                 document.querySelector('.menu-link[onclick*="home"]').classList.add('active');
                 document.querySelectorAll('.nav-item')[0].classList.add('active');
-                renderHomePage();
-            } else if (section === 'hot-drinks') {
+                setTimeout(() => {
+                    renderHomePage();
+                }, 300);
+                break;
+            case 'hot-drinks':
+                headerTitle.textContent = 'Hot Drinks';
+                headerSubtitle.textContent = 'Warm Beverages';
                 document.querySelector('.menu-link[onclick*="hot-drinks"]').classList.add('active');
                 document.querySelectorAll('.nav-item')[1].classList.add('active');
-                renderProducts('hot-drinks');
-            } else if (section === 'cold-drinks') {
+                setTimeout(() => {
+                    renderProducts('hot-drinks');
+                }, 300);
+                break;
+            case 'cold-drinks':
+                headerTitle.textContent = 'Cold Drinks';
+                headerSubtitle.textContent = 'Refreshing Beverages';
                 document.querySelector('.menu-link[onclick*="cold-drinks"]').classList.add('active');
                 document.querySelectorAll('.nav-item')[2].classList.add('active');
-                renderAllColdDrinks();
-            } else if (section === 'snacks') {
+                setTimeout(() => {
+                    renderAllColdDrinks();
+                }, 300);
+                break;
+            case 'snacks':
+                headerTitle.textContent = 'Snacks';
+                headerSubtitle.textContent = 'Delicious Treats';
                 document.querySelector('.menu-link[onclick*="snacks"]').classList.add('active');
                 document.querySelectorAll('.nav-item')[3].classList.add('active');
-                renderAllSnacks();
-            } else if (section === 'books') {
+                setTimeout(() => {
+                    renderAllSnacks();
+                }, 300);
+                break;
+            case 'books':
+                headerTitle.textContent = 'Books';
+                headerSubtitle.textContent = 'Reading Collection';
                 document.querySelector('.menu-link[onclick*="books"]').classList.add('active');
                 document.querySelectorAll('.nav-item')[4].classList.add('active');
-                renderAllBooks();
-            } else if (section === 'about') {
+                setTimeout(() => {
+                    renderAllBooks();
+                }, 300);
+                break;
+            case 'about':
+                headerTitle.textContent = 'About Us';
+                headerSubtitle.textContent = 'Our Story';
                 document.querySelector('.menu-link[onclick*="about"]').classList.add('active');
-            } else if (section === 'contact') {
+                break;
+            case 'contact':
+                headerTitle.textContent = 'Contact Us';
+                headerSubtitle.textContent = 'Get in Touch';
                 document.querySelector('.menu-link[onclick*="contact"]').classList.add('active');
-            }
+                break;
         }
+        
+        // Show requested section with animation
+        setTimeout(() => {
+            const sectionElement = document.getElementById(section + '-section');
+            if (sectionElement) {
+                sectionElement.style.display = 'block';
+                sectionElement.style.animation = 'fadeIn 0.5s ease-out';
+                
+                // Scroll to top
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        }, 300);
+    }
+    
+    // Set currency
+    function setCurrency(currency) {
+        currentCurrency = currency;
+        
+        // Animate currency change
+        const currencyBtns = document.querySelectorAll('.currency-btn');
+        currencyBtns.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.textContent.toUpperCase() === currency.toUpperCase()) {
+                setTimeout(() => {
+                    btn.classList.add('active');
+                }, 100);
+            }
+        });
+        
+        // Re-render all products
+        setTimeout(() => {
+            if (document.getElementById('home-section').style.display !== 'none') {
+                renderHomePage();
+            }
+            if (document.getElementById('hot-drinks-section').style.display !== 'none') {
+                renderProducts('hot-drinks');
+            }
+            if (document.getElementById('cold-drinks-section').style.display !== 'none') {
+                renderAllColdDrinks();
+            }
+            if (document.getElementById('snacks-section').style.display !== 'none') {
+                renderAllSnacks();
+            }
+            
+            // Update cart
+            updateCartDisplay();
+        }, 200);
+        
+        showNotification(`Currency changed to ${currency.toUpperCase()}`);
+    }
+    
+    // Format price based on currency
+    function formatPrice(price) {
+        if (currentCurrency === 'lbp') {
+            return (price * exchangeRate).toLocaleString() + ' LBP';
+        }
+        return '$' + price.toFixed(2);
+    }
+    
+    // Format price without symbol for calculations
+    function formatPriceNumber(price) {
+        if (currentCurrency === 'lbp') {
+            return price * exchangeRate;
+        }
+        return price;
+    }
+    
+    // Open Google Maps with the correct link
+    function openGoogleMaps() {
+        // Updated Google Maps link
+        const mapsUrl = 'https://maps.app.goo.gl/2v56uNwG64zxWeMw6?g_st=aw';
+        window.open(mapsUrl, '_blank');
     }
     
     // Render home page
     function renderHomePage() {
-        // Render featured products
-        const featuredProducts = products.filter(p => p.featured);
-        let featuredHtml = '';
-        
-        featuredProducts.forEach(product => {
-            featuredHtml += createProductCard(product);
-        });
-        
-        document.getElementById('featured-products').innerHTML = featuredHtml;
+        // No products on home page anymore
+        // The page has images and categories instead
     }
     
     // Render products by category
@@ -1896,8 +3119,8 @@
         let productsHtml = '';
         
         if (categoryProducts.length > 0) {
-            categoryProducts.forEach(product => {
-                productsHtml += createProductCard(product);
+            categoryProducts.forEach((product, index) => {
+                productsHtml += createProductCard(product, index * 0.1);
             });
         } else {
             productsHtml = `
@@ -1947,8 +3170,8 @@
         let productsHtml = '';
         
         if (productArray.length > 0) {
-            productArray.forEach(product => {
-                productsHtml += createProductCard(product);
+            productArray.forEach((product, index) => {
+                productsHtml += createProductCard(product, index * 0.1);
             });
         } else {
             productsHtml = `
@@ -1981,11 +3204,11 @@
         let booksHtml = '';
         
         if (bookArray.length > 0) {
-            bookArray.forEach(book => {
+            bookArray.forEach((book, index) => {
                 booksHtml += `
-                    <div class="book-card animate">
-                        <div class="book-icon">
-                            <i class="fas fa-book"></i>
+                    <div class="book-card animate" style="animation-delay: ${index * 0.1}s">
+                        <div class="book-image">
+                            <img src="${book.image}" alt="${book.name}">
                         </div>
                         <h4 class="book-name">${book.name}</h4>
                         <div class="book-author">${book.author}</div>
@@ -2016,11 +3239,19 @@
     }
     
     // Create product card HTML
-    function createProductCard(product) {
+    function createProductCard(product, delay = 0) {
+        const availabilityClass = product.inStock ? 'in-stock' : 'out-of-stock';
+        const availabilityText = product.inStock ? 'In Stock' : 'Out of Stock';
+        
         return `
-            <div class="product-card animate">
+            <div class="product-card" style="animation-delay: ${delay}s">
                 ${product.featured ? '<div class="product-badge featured"><i class="fas fa-star"></i> Featured</div>' : ''}
                 ${product.new ? '<div class="product-badge new"><i class="fas fa-certificate"></i> New</div>' : ''}
+                ${product.discount && product.originalPrice ? '<div class="product-badge discount"><i class="fas fa-tag"></i> Sale</div>' : ''}
+                
+                <div class="availability-toggle ${availabilityClass}" onclick="toggleProductAvailability(${product.id})">
+                    <i class="fas ${product.inStock ? 'fa-check-circle' : 'fa-times-circle'}"></i> ${availabilityText}
+                </div>
                 
                 <div class="product-image">
                     <img src="${product.image || 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=300&fit=crop'}" alt="${product.name}">
@@ -2033,14 +3264,41 @@
                     <h3 class="product-name">${product.name}</h3>
                     <p class="product-description">${product.description}</p>
                     <div class="product-price">
-                        <div class="price">$${product.price.toFixed(2)}</div>
-                        <button class="order-btn" onclick="addToCart(${product.id})" ${!product.inStock ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                        <div class="price-container">
+                            ${product.originalPrice ? `<div class="price old-price">${formatPrice(product.originalPrice)}</div>` : ''}
+                            <div class="price">${formatPrice(product.price)}</div>
+                        </div>
+                        <button class="order-btn" onclick="addToCart(${product.id})" ${!product.inStock ? 'disabled' : ''}>
                             <i class="fas fa-cart-plus"></i> ${product.inStock ? 'Add to Cart' : 'Out of Stock'}
                         </button>
                     </div>
                 </div>
             </div>
         `;
+    }
+    
+    // Toggle product availability (for admin simulation)
+    function toggleProductAvailability(productId) {
+        const product = products.find(p => p.id === productId);
+        if (product) {
+            product.inStock = !product.inStock;
+            
+            // Re-render current section
+            if (document.getElementById('home-section').style.display !== 'none') {
+                renderHomePage();
+            }
+            if (document.getElementById('hot-drinks-section').style.display !== 'none') {
+                renderProducts('hot-drinks');
+            }
+            if (document.getElementById('cold-drinks-section').style.display !== 'none') {
+                renderAllColdDrinks();
+            }
+            if (document.getElementById('snacks-section').style.display !== 'none') {
+                renderAllSnacks();
+            }
+            
+            showNotification(`${product.name} is now ${product.inStock ? 'in stock' : 'out of stock'}`);
+        }
     }
     
     // Get category display name
@@ -2085,6 +3343,13 @@
         
         updateCartDisplay();
         showNotification(`${product.name} added to cart!`);
+        
+        // Animate cart button
+        const cartBtn = document.querySelector('.cart-float');
+        cartBtn.style.transform = 'scale(1.2)';
+        setTimeout(() => {
+            cartBtn.style.transform = '';
+        }, 300);
     }
     
     // Update cart display
@@ -2095,7 +3360,14 @@
         const total = subtotal + tax;
         
         // Update cart badge
-        document.getElementById('cartFloatBadge').textContent = totalItems;
+        const cartBadge = document.getElementById('cartFloatBadge');
+        cartBadge.textContent = totalItems;
+        if (totalItems > 0) {
+            cartBadge.style.animation = 'bounce 0.5s';
+            setTimeout(() => {
+                cartBadge.style.animation = '';
+            }, 500);
+        }
         
         // Update cart modal if open
         const cartItems = document.getElementById('cartItems');
@@ -2107,12 +3379,16 @@
             cartItems.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 20px;">Your cart is empty</p>';
         } else {
             let cartHtml = '';
-            cart.forEach(item => {
+            cart.forEach((item, index) => {
+                const itemPrice = currentCurrency === 'lbp' ? 
+                    (item.price * exchangeRate).toLocaleString() + ' LBP' : 
+                    '$' + (item.price * item.quantity).toFixed(2);
+                    
                 cartHtml += `
-                    <div class="cart-item">
+                    <div class="cart-item" style="animation-delay: ${index * 0.1}s">
                         <div class="cart-item-info">
                             <div class="cart-item-name">${item.name}</div>
-                            <div class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+                            <div class="cart-item-price">${itemPrice}</div>
                         </div>
                         <div class="cart-item-controls">
                             <div class="cart-item-qty">
@@ -2130,9 +3406,9 @@
             cartItems.innerHTML = cartHtml;
         }
         
-        cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
-        cartTax.textContent = `$${tax.toFixed(2)}`;
-        cartTotal.textContent = `$${total.toFixed(2)}`;
+        cartSubtotal.textContent = formatPrice(subtotal);
+        cartTax.textContent = formatPrice(tax);
+        cartTotal.textContent = formatPrice(total);
         
         // Save cart
         localStorage.setItem('coffeeShopCart', JSON.stringify(cart));
@@ -2174,11 +3450,13 @@
     function openCart() {
         updateCartDisplay();
         document.getElementById('cartModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
     }
     
     // Close cart modal
     function closeCart() {
         document.getElementById('cartModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
     }
     
     // Checkout via WhatsApp
@@ -2188,30 +3466,32 @@
             return;
         }
         
-        let message = "☕ *روايات Coffee Shop Order* 📚\n\n";
+        let message = "☕ *روايات Coffee Shop Order* 📚\n";
+        message += "📍 Tripoli, Lebanon - City Complex\n\n";
         message += "Hello, I would like to order:\n\n";
         let subtotal = 0;
         
         cart.forEach(item => {
-            const itemTotal = (item.price * item.quantity).toFixed(2);
+            const itemTotal = (item.price * item.quantity);
             message += `• ${item.name} × ${item.quantity}\n`;
-            message += `  Price: $${itemTotal}\n\n`;
+            message += `  Price: ${formatPrice(itemTotal)}\n\n`;
             subtotal += item.price * item.quantity;
         });
         
         const tax = subtotal * 0.08;
         const total = subtotal + tax;
         
-        message += `📦 *Subtotal: $${subtotal.toFixed(2)}*\n`;
-        message += `💰 *Tax: $${tax.toFixed(2)}*\n`;
-        message += `💳 *Total: $${total.toFixed(2)}*\n\n`;
+        message += `📦 *Subtotal: ${formatPrice(subtotal)}*\n`;
+        message += `💰 *Tax: ${formatPrice(tax)}*\n`;
+        message += `💳 *Total: ${formatPrice(total)}*\n\n`;
         message += `📍 Delivery Address: ________________\n`;
         message += `📱 Contact Number: ________________\n`;
         message += `💬 Special Instructions: ________________\n\n`;
         message += `Thank you!`;
         
-        // Send via WhatsApp - Updated phone number
-        const whatsappUrl = `https://wa.me/96571761705?text=${encodeURIComponent(message)}`;
+        // Send via WhatsApp
+        const phoneNumber = "+96171761705";
+        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
         
         // Clear cart after order
@@ -2221,43 +3501,89 @@
         showNotification('Order sent to WhatsApp!');
     }
     
-    // Send message
+    // Send message via contact form
     function sendMessage() {
-        const name = document.querySelector('#contact-section input[type="text"]').value;
-        const email = document.querySelector('#contact-section input[type="email"]').value;
-        const message = document.querySelector('#contact-section textarea').value;
+        const name = document.getElementById('contactName').value;
+        const email = document.getElementById('contactEmail').value;
+        const phone = document.getElementById('contactPhone').value;
+        const message = document.getElementById('contactMessage').value;
         
         if (!name || !email || !message) {
-            alert('Please fill in all fields');
+            alert('Please fill in all required fields (Name, Email, Message)');
             return;
         }
+        
+        // Send email (simulated)
+        const subject = "New Message from روايات Coffee Shop Website";
+        const body = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nMessage:\n${message}`;
         
         // In a real app, this would send to a server
         alert(`Thank you ${name}! Your message has been sent. We will contact you at ${email} soon.`);
         
         // Clear form
-        document.querySelector('#contact-section input[type="text"]').value = '';
-        document.querySelector('#contact-section input[type="email"]').value = '';
-        document.querySelector('#contact-section textarea').value = '';
+        document.getElementById('contactName').value = '';
+        document.getElementById('contactEmail').value = '';
+        document.getElementById('contactPhone').value = '';
+        document.getElementById('contactMessage').value = '';
     }
     
-    // Show notification
+    // Send message via WhatsApp
+    function sendWhatsAppMessage() {
+        const name = document.getElementById('contactName').value;
+        const email = document.getElementById('contactEmail').value;
+        const phone = document.getElementById('contactPhone').value;
+        const message = document.getElementById('contactMessage').value;
+        
+        if (!name || !message) {
+            alert('Please at least provide your name and message');
+            return;
+        }
+        
+        const whatsappMessage = `*New Message from روايات Website*\n\n` +
+                               `Name: ${name}\n` +
+                               `Email: ${email}\n` +
+                               `Phone: ${phone}\n\n` +
+                               `Message: ${message}`;
+        
+        const phoneNumber = "+96171761705";
+        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+        window.open(whatsappUrl, '_blank');
+    }
+    
+    // Show notification with animation
     function showNotification(message) {
         const notification = document.createElement('div');
         notification.innerHTML = `
             <div style="position: fixed; top: 100px; right: 15px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); 
                         color: white; padding: 12px 20px; border-radius: 8px; box-shadow: 0 8px 20px rgba(139,69,19,0.3); 
-                        z-index: 10001; display: flex; align-items: center; gap: 10px; animation: fadeIn 0.3s ease-out; max-width: 300px;">
-                <i class="fas fa-check-circle" style="font-size: 18px;"></i>
+                        z-index: 10001; display: flex; align-items: center; gap: 10px; animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-out 2.7s; max-width: 300px;">
+                <i class="fas fa-check-circle" style="font-size: 18px; animation: bounce 2s infinite;"></i>
                 <div style="font-size: 14px;">${message}</div>
             </div>
         `;
         document.body.appendChild(notification);
         
         setTimeout(() => {
-            notification.remove();
+            notification.style.animation = 'slideOutRight 0.3s ease-out forwards';
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
         }, 3000);
     }
+    
+    // Add CSS for fadeOut animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
     </script>
 </body>
 </html>
